@@ -1,0 +1,12 @@
+                {DRF}
+==============================================
+uv venv
+
+uv pip install djangorestframework ruff
+
+uv pip freeze > requirements.txt
+
+django-admin startproject config .
+
+python manage.py check
+==============================================
