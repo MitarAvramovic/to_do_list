@@ -1,3 +1,3 @@
-# accounts/tests.py
+# tasks/tests.py
 
 from django.test import TestCase
