@@ -10,3 +10,25 @@ django-admin startproject config .
 
 python manage.py check
 ==============================================
+                {GITHUB}
+==============================================
+git config --global user.name "Tvoje Ime"
+
+git config --global user.email "tvoj@email.com"
+
+git init
+
+git remote add origin https://github.com/MitarAvramovic/to_do_list.git
+
+git branch -M main
+
+git add .
+
+git commit -m "Initial commit"
+
+git push origin main
+
+git push -u origin main --force
+==============================================
+
+python manage.py createsuperuser
