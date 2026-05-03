@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./TaskDetail.css";
+import Navbar from "./Navbar";
 
 function TaskDetail() {
 
@@ -79,31 +80,34 @@ function TaskDetail() {
     if (!task) return <p>Loading...</p>;
 
     return (
-    <div className="page">
-        <div className="detail-container">
-            <h2>Edit Task</h2>
+        <div>
+            <Navbar />
+            <div className="page">
+                <div className="detail-container">
+                    <h2>Edit Task</h2>
 
-            <input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
+                    <input
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
 
-            <div className="buttons">
-                <button className="update-btn" onClick={updateTask}>
-                    Update
-                </button>
+                    <div className="buttons">
+                        <button className="update-btn" onClick={updateTask}>
+                            Update
+                        </button>
 
-                <button className="delete-btn" onClick={deleteTask}>
-                    Delete
-                </button>
+                        <button className="delete-btn" onClick={deleteTask}>
+                            Delete
+                        </button>
 
-                <button className="toggle-btn" onClick={toggleDone}>
-                    {task.completed ? "Mark as Undone" : "Mark as Done"}
-                </button>
+                        <button className="toggle-btn" onClick={toggleDone}>
+                            {task.completed ? "Mark as Undone" : "Mark as Done"}
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
 
 }
 

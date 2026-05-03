@@ -68,3 +68,21 @@
     text-decoration: line-through;
     color: gray;
 }
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+
+    border: 1px solid #eee;
+    border-radius: 8px;
+
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.task-title.completed {
+    text-decoration: line-through;
+    color: gray;
+}

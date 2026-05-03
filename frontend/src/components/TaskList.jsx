@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
 import "./TaskList.css";
-
 
 function getCookie(name) {
     let cookieValue = null;
@@ -22,9 +22,11 @@ function TaskList() {
     const [tasks, setTasks] = useState([]);
     const [title, setTitle] = useState("");
     const navigate = useNavigate();
+
     useEffect(() => {
         fetchTasks();
     }, []);
+
 
     const fetchTasks = () => {
         fetch("http://localhost:8000/api/tasks/", {
@@ -33,6 +35,7 @@ function TaskList() {
             .then((res) => res.json())
             .then((data) => setTasks(data));
     };
+
     const createTask = (e) => {
         e.preventDefault();
 
@@ -51,49 +54,84 @@ function TaskList() {
             }),
         })
             .then((res) => res.json())
-            .then((data) => {
+            .then(() => {
                 setTitle("");
-                fetchTasks(); 
+                fetchTasks();
             })
             .catch((err) => console.error(err));
     };
+
+
+    const toggleTask = (task) => {
+        const csrftoken = getCookie("csrftoken");
+
+        fetch(`http://localhost:8000/api/tasks/${task.id}/`, {
+            method: "PATCH",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken,
+            },
+            body: JSON.stringify({
+                completed: !task.completed,
+            }),
+        })
+            .then((res) => res.json())
+            .then(() => {
+                fetchTasks();
+            });
+    };
+
     return (
-    <div className="page">
-        <div className="task-container">
-            <h2>My Tasks</h2>
+        <div>
+            <Navbar />
 
-            <form className="task-form" onSubmit={createTask}>
-                <input
-                    type="text"
-                    placeholder="New task..."
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-                <button type="submit">Add</button>
-            </form>
+            <div className="page">
+                <div className="task-container">
+                    <h2>My Tasks</h2>
 
-            {tasks.map((task) => (
-                <div
-                    key={task.id}
-                    className="task-item"
-                    onClick={() => navigate(`/tasks/${task.id}`)}
-                >
-                    <span
-                        className={`task-title ${
-                            task.completed ? "completed" : ""
-                        }`}
-                    >
-                        {task.title}
-                    </span>
+                    {/* CREATE TASK */}
+                    <form className="task-form" onSubmit={createTask}>
+                        <input
+                            type="text"
+                            placeholder="New task..."
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                        <button type="submit">Add</button>
+                    </form>
 
-                    <span>
-                        {task.completed ? "✅" : ""}
-                    </span>
+
+                    {tasks.map((task) => (
+                        <div key={task.id} className="task-item">
+
+
+                            <input
+                                type="checkbox"
+                                checked={task.completed}
+                                onChange={(e) => {
+                                    e.stopPropagation();
+                                    toggleTask(task);
+                                }}
+                            />
+
+
+                            <span
+                                onClick={() => navigate(`/tasks/${task.id}`)}
+                                className={`task-title ${task.completed ? "completed" : ""
+                                    }`}
+                            >
+                                {task.title}
+                            </span>
+
+
+                            <span>{task.completed ? "✅" : ""}</span>
+                        </div>
+                    ))}
                 </div>
-            ))}
+            </div>
         </div>
-    </div>
-);
+    );
 }
 
 export default TaskList;
