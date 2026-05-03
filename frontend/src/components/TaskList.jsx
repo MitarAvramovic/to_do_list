@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./TaskList.css";
 
-function getCookie(name){
+
+function getCookie(name) {
     let cookieValue = null;
     if (document.cookie) {
         const cookies = document.cookie.split(";");
@@ -18,7 +21,7 @@ function getCookie(name){
 function TaskList() {
     const [tasks, setTasks] = useState([]);
     const [title, setTitle] = useState("");
-    
+    const navigate = useNavigate();
     useEffect(() => {
         fetchTasks();
     }, []);
@@ -30,10 +33,10 @@ function TaskList() {
             .then((res) => res.json())
             .then((data) => setTasks(data));
     };
-        const createTask = (e) => {
+    const createTask = (e) => {
         e.preventDefault();
-        
-        const csrftoken = getCookie("csrftoken");    
+
+        const csrftoken = getCookie("csrftoken");
 
         fetch("http://localhost:8000/api/tasks/", {
             method: "POST",
@@ -50,18 +53,19 @@ function TaskList() {
             .then((res) => res.json())
             .then((data) => {
                 setTitle("");
-                fetchTasks(); // refresh lista
+                fetchTasks(); 
             })
             .catch((err) => console.error(err));
     };
-        return (
-        <div>
-            <h2>Tasks</h2>
+    return (
+    <div className="page">
+        <div className="task-container">
+            <h2>My Tasks</h2>
 
-            <form onSubmit={createTask}>
+            <form className="task-form" onSubmit={createTask}>
                 <input
                     type="text"
-                    placeholder="New task"
+                    placeholder="New task..."
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
@@ -69,12 +73,27 @@ function TaskList() {
             </form>
 
             {tasks.map((task) => (
-                <div key={task.id}>
-                    <p>{task.title}</p>
+                <div
+                    key={task.id}
+                    className="task-item"
+                    onClick={() => navigate(`/tasks/${task.id}`)}
+                >
+                    <span
+                        className={`task-title ${
+                            task.completed ? "completed" : ""
+                        }`}
+                    >
+                        {task.title}
+                    </span>
+
+                    <span>
+                        {task.completed ? "✅" : ""}
+                    </span>
                 </div>
             ))}
         </div>
-    );
+    </div>
+);
 }
 
 export default TaskList;

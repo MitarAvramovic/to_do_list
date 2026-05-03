@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -49,7 +50,7 @@ function Login() {
             }),
         })
             .then((res) => {
-                // 🔥 2. PROVERA DA LI JE LOGIN STVARNO USPEO
+                
                 if (!res.ok || res.url.includes("login")) {
                     console.log("Login failed");
                     return;
@@ -62,20 +63,21 @@ function Login() {
     };
 
     return (
-        <div>
+    <div className="container">
+        <div className="login-box">
             <h2>Login</h2>
 
             <form onSubmit={handleLogin}>
-                <input
+                <input 
                     type="text"
-                    placeholder="username"
+                    placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />
 
-                <input
+                <input 
                     type="password"
-                    placeholder="password"
+                    placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
@@ -83,7 +85,8 @@ function Login() {
                 <button type="submit">Login</button>
             </form>
         </div>
-    );
+    </div>
+);
 }
 
 export default Login;
